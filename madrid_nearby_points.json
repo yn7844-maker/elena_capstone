@@ -1,0 +1,32 @@
+[
+  {
+    "label": "sol",
+    "latitude": 40.4168,
+    "longitude": -3.7038,
+    "radius": 2200
+  },
+  {
+    "label": "salamanca",
+    "latitude": 40.4302,
+    "longitude": -3.6835,
+    "radius": 2200
+  },
+  {
+    "label": "chamartin",
+    "latitude": 40.4637,
+    "longitude": -3.689,
+    "radius": 2200
+  },
+  {
+    "label": "arganzuela",
+    "latitude": 40.3982,
+    "longitude": -3.6981,
+    "radius": 2200
+  },
+  {
+    "label": "tetuan",
+    "latitude": 40.4605,
+    "longitude": -3.6998,
+    "radius": 2200
+  }
+]

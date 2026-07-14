@@ -1,0 +1,11 @@
+# One query per line
+supermercado en Madrid
+grocery store in Madrid
+Carrefour Express Madrid
+Mercadona Madrid
+Dia Madrid
+Lidl Madrid
+Alcampo Madrid
+El Corte Ingles supermercado Madrid
+Sanchez Romero Madrid
+Mercado de la Paz Madrid
