@@ -1,6 +1,7 @@
 import math
 import base64
 from pathlib import Path
+import re
 
 import pandas as pd
 import pydeck as pdk
@@ -277,6 +278,45 @@ def build_anchor_summary(category_df: pd.DataFrame, selected_category: str):
     return anchor.iloc[0]
 
 
+def polish_copy(text: str) -> str:
+    value = str(text or "").strip()
+    replacements = {
+        "Resident 기본 장보기": "생활형 장보기",
+        "Resident Mode": "장기 장보기",
+        "Resident ": "생활형 ",
+        "Mercadona랑": "Mercadona와",
+        "가깝다.": "가까워요.",
+        "맞는다.": "잘 맞아요.",
+        "약했다.": "약했어요.",
+        "강했다.": "강했어요.",
+        "보였다.": "보였어요.",
+        "느껴졌다.": "느껴졌어요.",
+        "편이었다.": "편이었어요.",
+        "쉬운 편이다.": "쉬운 편이에요.",
+        "잘 맞는 편이다.": "잘 맞는 편이에요.",
+        "무난하게 연결되는 선택지": "무난하게 들르기 좋은 선택지예요",
+        "실패 없이 고르기 쉬운 백화점형 선택지": "실패 없이 고르기 쉬운 백화점형 선택지예요",
+        "신선식품과 하몽·치즈·해산물 탐색에 강한 시장형 식재료 목적지": "신선식품과 하몽, 치즈, 해산물을 보기 좋은 시장형 장보기 장소예요",
+        "생활형 장보기": "일상 장보기",
+    }
+    for old, new in replacements.items():
+        value = value.replace(old, new)
+    if value and value[-1] not in ".!?":
+        noun_endings = ("선택지", "목적지", "거점", "기준점", "장소", "마트", "코스", "매장", "스타일")
+        if value.endswith(noun_endings):
+            value = f"{value}예요."
+        elif value.endswith("편"):
+            value = f"{value}이에요."
+    return value
+
+
+def format_copy_blocks(text: str) -> str:
+    cleaned = polish_copy(text)
+    chunks = re.split(r"(?<=[.!?])\s+", cleaned)
+    chunks = [chunk.strip() for chunk in chunks if chunk.strip()]
+    return "\n\n".join(chunks)
+
+
 def build_sample_reviews(mart_name: str, category: str, mode: str) -> list[tuple[str, str]]:
     mart_reviews = {
         "El Corte Inglés Serrano": [
@@ -360,7 +400,7 @@ def render_detail_contents(row: pd.Series, selected_category: str, mode: str):
     metric_d.metric("거리", f"{row['distance_km']} km")
 
     st.markdown("### 왜 추천했는지")
-    st.write(row["ai_reason"])
+    st.markdown(format_copy_blocks(row["ai_reason"]))
 
     card_a, card_b = st.columns(2, gap="medium")
     with card_a:
@@ -517,6 +557,8 @@ st.markdown(
         margin: 0.3rem 0 0 0;
         color: #72624f;
         font-size: 0.98rem;
+        word-break: keep-all;
+        overflow-wrap: break-word;
     }
     .actions {
         display: flex;
@@ -644,6 +686,8 @@ st.markdown(
     .bottom-banner p {
         margin: 0.18rem 0 0 0;
         color: #8b7760;
+        word-break: keep-all;
+        overflow-wrap: break-word;
     }
     .recommend-strip {
         display: flex;
@@ -698,6 +742,8 @@ st.markdown(
         color: #665847;
         line-height: 1.6;
         font-size: 0.95rem;
+        word-break: keep-all;
+        overflow-wrap: break-word;
     }
     .top-search-wrap {
         margin-top: 1.8rem;
@@ -717,6 +763,8 @@ st.markdown(
         border: 1px solid rgba(225, 215, 201, 0.95);
         color: #675849;
         box-shadow: 0 14px 34px rgba(74, 54, 30, 0.07);
+        word-break: keep-all;
+        overflow-wrap: break-word;
     }
     .service-note strong {
         color: #241d18;
@@ -747,6 +795,8 @@ st.markdown(
         font-size: 0.88rem;
         line-height: 1.55;
         margin-top: 0.15rem;
+        word-break: keep-all;
+        overflow-wrap: break-word;
     }
     .rank-divider {
         border: none;
@@ -919,6 +969,15 @@ st.markdown(
         line-height: 1.55;
         margin-top: 0.45rem;
         font-size: 0.94rem;
+        word-break: keep-all;
+        overflow-wrap: break-word;
+    }
+    [data-testid="stMarkdownContainer"] p,
+    [data-testid="stMarkdownContainer"] li,
+    [data-testid="stMarkdownContainer"] div {
+        word-break: keep-all;
+        overflow-wrap: break-word;
+        line-height: 1.72;
     }
     </style>
     """,
@@ -1194,7 +1253,7 @@ with center_col:
             <div>
               <p>지금 보기엔 여기부터 가보면 좋아요</p>
               <h2>{top_pick['name']}</h2>
-              <p>{top_pick['ai_reason']}</p>
+              <p>{polish_copy(top_pick['ai_reason'])}</p>
               <div class="section-note">거리 {top_pick['distance_km']} km · 평점 {top_pick['rating']} · 리뷰 {int(top_pick['review_count'])}개</div>
             </div>
             <div class="buy-chip">지도에서 보기</div>
@@ -1208,8 +1267,8 @@ with center_col:
             f"""
             <div class="anchor-card">
               <div class="anchor-eyebrow">생활 장보기 기준</div>
-              <div class="anchor-title">Mercadona랑 비교하면</div>
-              <div class="anchor-copy">{anchor_row['summary_copy']}</div>
+              <div class="anchor-title">Mercadona와 비교하면</div>
+              <div class="anchor-copy">{polish_copy(anchor_row['summary_copy'])}</div>
               <div class="section-note">가격대 {anchor_row['price_band']} · 장기 이용 {int(anchor_row['resident_fit'])}/5 · 일상 장보기 {int(anchor_row['daily_use_suitability'])}/5</div>
             </div>
             """,
@@ -1222,7 +1281,7 @@ detail_cols = st.columns([1.2, 1.2, 1], gap="medium")
 with detail_cols[0]:
     with st.container(border=True):
         st.subheader("왜 이곳을 추천했을까")
-        st.write(selected_mart["ai_reason"])
+        st.markdown(format_copy_blocks(selected_mart["ai_reason"]))
         st.caption("주소")
         st.write(selected_mart["address"])
         st.caption("사이트")
@@ -1237,7 +1296,7 @@ with detail_cols[0]:
 with detail_cols[1]:
     with st.container(border=True):
         st.subheader("같이 비교해볼 곳")
-        st.write(second_pick["ai_reason"])
+        st.markdown(format_copy_blocks(second_pick["ai_reason"]))
         st.caption("주소")
         st.write(second_pick["address"])
         st.caption("사이트")
@@ -1252,12 +1311,12 @@ with detail_cols[1]:
 with detail_cols[2]:
     with st.container(border=True):
         st.subheader("가기 전에 체크해보세요")
-        st.write(f"- 이런 분께 잘 맞아요: {selected_mart['recommended_for']}")
-        st.write(f"- 이런 경우엔 아쉬울 수 있어요: {selected_mart['avoid_if']}")
-        st.write(f"- 한 줄로 보면: {selected_mart['summary_copy']}")
+        st.markdown(f"- 이런 분께 잘 맞아요: {polish_copy(selected_mart['recommended_for'])}")
+        st.markdown(f"- 이런 경우엔 아쉬울 수 있어요: {polish_copy(selected_mart['avoid_if'])}")
+        st.markdown(f"- 한 줄로 보면: {polish_copy(selected_mart['summary_copy'])}")
         if anchor_row is not None:
-            st.write(f"- Mercadona와 비교하면: {anchor_row['summary_copy']}")
-            st.write(f"- 가격대 느낌: {anchor_row['price_band']}")
+            st.markdown(f"- Mercadona와 비교하면: {polish_copy(anchor_row['summary_copy'])}")
+            st.markdown(f"- 가격대 느낌: {anchor_row['price_band']}")
 
 detail_name = st.session_state.get("detail_mart_name")
 if detail_name and detail_name in working["name"].tolist():
