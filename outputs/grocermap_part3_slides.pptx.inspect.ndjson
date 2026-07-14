@@ -1,0 +1,79 @@
+{"kind":"deck","id":"pr/cywqr8","name":"Deck"}
+{"kind":"layout","layoutId":"20170e8b-41f1-41d6-b97f-1ccaab45f240","name":"Master","type":"master"}
+{"kind":"layout","layoutId":"7a9180cf-3d81-49d2-bb2e-6278a092e0fd","name":"Title Slide","type":"title"}
+{"kind":"slide","id":"sl/knlqzf","slide":1,"title":"PART 3","textShapes":12}
+{"kind":"textbox","id":"sh/8z25kb6x","slide":1,"text":"PART 3","textPreview":"PART 3","textChars":6,"textLines":1,"bbox":[58,54,150,26]}
+{"kind":"textbox","id":"sh/je9cvixc","slide":1,"text":"서비스를 실제로 구현하고 검증하는 방법","textPreview":"서비스를 실제로 구현하고 검증하는 방법","textChars":21,"textLines":1,"bbox":[58,120,840,84]}
+{"kind":"textbox","id":"sh/qtcj6tov","slide":1,"text":"8. 핵심 기능  9. 데이터 확보 전략  10. MVP","textPreview":"8. 핵심 기능  9. 데이터 확보 전략  10. MVP","textChars":31,"textLines":1,"bbox":[58,220,780,36]}
+{"kind":"shape","id":"sh/xs72x4na","slide":1,"bbox":[58,285,1120,0]}
+{"kind":"shape","id":"sh/87ed8bat","slide":1,"bbox":[58,328,460,250]}
+{"kind":"textbox","id":"sh/fmlkjm1c","slide":1,"text":"이번 파트의 질문","textPreview":"이번 파트의 질문","textChars":9,"textLines":1,"bbox":[78,352,180,28]}
+{"kind":"textbox","id":"sh/q1orytsv","slide":1,"text":"이 서비스는 실제로 무엇을 보여주고,\n어떤 데이터로 작동하며,\n어디까지 먼저 검증할 것인가?","textPreview":"이 서비스는 실제로 무엇을 보여주고, | 어떤 데이터로 작동하며, | 어디까지 먼저 검증할 것인가?","textChars":51,"textLines":3,"bbox":[78,402,390,120]}
+{"kind":"textbox","id":"sh/x4nap4r6","slide":1,"text":"발표 흐름","textPreview":"발표 흐름","textChars":5,"textLines":1,"bbox":[620,352,120,28]}
+{"kind":"shape","id":"sh/8jqh0fep","slide":1,"bbox":[620,388,250,170]}
+{"kind":"textbox","id":"sh/mp0bi9s3","slide":1,"text":"8. 핵심 기능","textPreview":"8. 핵심 기능","textChars":8,"textLines":1,"bbox":[638,402,214,34]}
+{"kind":"textbox","id":"sh/bat47y1k","slide":1,"text":"• AI 추천 + 지도 비교 + 리뷰 반영\n• 직접 시연으로 작동 흐름 확인","textPreview":"• AI 추천 + 지도 비교 + 리뷰 반영 | • 직접 시연으로 작동 흐름 확인","textChars":42,"textLines":2,"bbox":[638,446,214,98]}
+{"kind":"shape","id":"sh/4vmtwra5","slide":1,"bbox":[892,388,286,170]}
+{"kind":"textbox","id":"sh/tgfmlkjm","slide":1,"text":"9. 데이터 확보 전략","textPreview":"9. 데이터 확보 전략","textChars":12,"textLines":1,"bbox":[910,402,250,34]}
+{"kind":"textbox","id":"sh/m1cfa9w3","slide":1,"text":"• 기본 장소 데이터\n• 운영자 큐레이션\n• 사용자 경험 데이터","textPreview":"• 기본 장소 데이터 | • 운영자 큐레이션 | • 사용자 경험 데이터","textChars":35,"textLines":3,"bbox":[910,446,250,98]}
+{"kind":"shape","id":"sh/bm58z25k","slide":1,"bbox":[620,576,558,102]}
+{"kind":"textbox","id":"sh/47y1kre1","slide":1,"text":"10. MVP","textPreview":"10. MVP","textChars":7,"textLines":1,"bbox":[638,590,522,34]}
+{"kind":"textbox","id":"sh/tsvu9kni","slide":1,"text":"• 마드리드 살라망카 5개 마트\n• 핵심 품목과 추천 기능부터 검증","textPreview":"• 마드리드 살라망카 5개 마트 | • 핵심 품목과 추천 기능부터 검증","textChars":37,"textLines":2,"bbox":[638,634,522,30]}
+{"kind":"notes","id":"nt/knlqzf","slide":1,"text":""}
+{"kind":"slide","id":"sl/kweb8o","slide":2,"title":"핵심 기능은 사용자의 장보기 결정을 빠르게 줄여준다","textShapes":15}
+{"kind":"textbox","id":"sh/qd4vmtwr","slide":2,"text":"핵심 기능은 사용자의 장보기 결정을 빠르게 줄여준다","textPreview":"핵심 기능은 사용자의 장보기 결정을 빠르게 줄여준다","textChars":28,"textLines":1,"bbox":[54,44,980,44]}
+{"kind":"textbox","id":"sh/x4nap4r6","slide":2,"text":"8. 핵심 기능","textPreview":"8. 핵심 기능","textChars":8,"textLines":1,"bbox":[54,92,220,24]}
+{"kind":"shape","id":"sh/8jqh0fep","slide":2,"bbox":[54,126,1172,0]}
+{"kind":"shape","id":"sh/fa9w3m94","slide":2,"bbox":[54,154,360,150]}
+{"kind":"textbox","id":"sh/qpg3ex0n","slide":2,"text":"1. 목적 기반 추천","textPreview":"1. 목적 기반 추천","textChars":11,"textLines":1,"bbox":[72,168,324,34]}
+{"kind":"textbox","id":"sh/xczed8v6","slide":2,"text":"• 상품, 예산, 체류기간, 인원을 입력하면\n• AI가 가장 적합한 마트를 우선순위로 제시","textPreview":"• 상품, 예산, 체류기간, 인원을 입력하면 | • AI가 가장 적합한 마트를 우선순위로 제시","textChars":50,"textLines":2,"bbox":[72,212,324,78]}
+{"kind":"shape","id":"sh/8v6psfil","slide":2,"bbox":[432,154,360,150]}
+{"kind":"textbox","id":"sh/je9cvixc","slide":2,"text":"2. 추천 이유 설명","textPreview":"2. 추천 이유 설명","textChars":11,"textLines":1,"bbox":[450,168,324,34]}
+{"kind":"textbox","id":"sh/qtcj6tov","slide":2,"text":"• 왜 이 마트가 맞는지 가격대, 품목, 이용 상황으로 설명\n• 단순 검색 결과가 아니라 선택 근거를 제공","textPreview":"• 왜 이 마트가 맞는지 가격대, 품목, 이용 상황으로 설명 | • 단순 검색 결과가 아니라 선택 근거를 제공","textChars":59,"textLines":2,"bbox":[450,212,324,78]}
+{"kind":"shape","id":"sh/svu9knih","slide":2,"bbox":[810,154,360,150]}
+{"kind":"textbox","id":"sh/hgn29gr2","slide":2,"text":"3. 지도 기반 비교","textPreview":"3. 지도 기반 비교","textChars":11,"textLines":1,"bbox":[828,168,324,34]}
+{"kind":"textbox","id":"sh/ap4r65wj","slide":2,"text":"• 추천 마트를 지도 위에서 거리와 함께 비교\n• 운영시간과 예상 비용도 함께 확인","textPreview":"• 추천 마트를 지도 위에서 거리와 함께 비교 | • 운영시간과 예상 비용도 함께 확인","textChars":46,"textLines":2,"bbox":[828,212,324,78]}
+{"kind":"shape","id":"sh/za1gvy90","slide":2,"bbox":[54,322,360,150]}
+{"kind":"textbox","id":"sh/s36hcrmh","slide":2,"text":"4. 리뷰 기반 업데이트","textPreview":"4. 리뷰 기반 업데이트","textChars":13,"textLines":1,"bbox":[72,336,324,34]}
+{"kind":"textbox","id":"sh/hoza1gvy","slide":2,"text":"• 실제 구매자가 가격, 판매 여부, 만족도를 남김\n• 누적된 데이터가 다음 추천의 품질을 높임","textPreview":"• 실제 구매자가 가격, 판매 여부, 만족도를 남김 | • 누적된 데이터가 다음 추천의 품질을 높임","textChars":53,"textLines":2,"bbox":[72,380,324,78]}
+{"kind":"shape","id":"sh/a1gvy90j","slide":2,"bbox":[432,322,738,318]}
+{"kind":"textbox","id":"sh/zidonyd0","slide":2,"text":"시연 흐름","textPreview":"시연 흐름","textChars":5,"textLines":1,"bbox":[452,342,180,28]}
+{"kind":"textbox","id":"sh/s72x4nap","slide":2,"text":"검색어 입력\n→ 단기/장기 모드 선택\n→ 예산·인원·체류기간 조정\n→ 추천 랭킹 확인\n→ 지도와 상세 정보 확인","textPreview":"검색어 입력 | → 단기/장기 모드 선택 | → 예산·인원·체류기간 조정 | → 추천 랭킹 확인 | → 지도와 상세 정보 확인","textChars":62,"textLines":5,"bbox":[452,390,310,190]}
+{"kind":"textbox","id":"sh/lszqtcj6","slide":2,"text":"시연 포인트","textPreview":"시연 포인트","textChars":6,"textLines":1,"bbox":[820,342,180,28]}
+{"kind":"textbox","id":"sh/pg3ex0nu","slide":2,"text":"• 같은 상품이라도 단기/장기 모드에 따라 추천 순위가 바뀜\n• Mercadona를 Anchor로 두고 다른 마트의 역할을 비교 가능\n• 추천 결과가 지도, 운영시간, 설명 카드로 연결됨","textPreview":"• 같은 상품이라도 단기/장기 모드에 따라 추천 순위가 바뀜 | • Mercadona를 Anchor로 두고 다른 마트의 역할을 비교 가능 | • 추천 결과가 지도, 운영시간, 설명 카드로 연결됨","textChars":104,"textLines":3,"bbox":[820,390,310,170]}
+{"kind":"textbox","id":"sh/wval87ed","slide":2,"text":"직접 시연으로 보여줄 핵심은 “정보 제공”이 아니라 “선택 지원”이다.","textPreview":"직접 시연으로 보여줄 핵심은 “정보 제공”이 아니라 “선택 지원”이다.","textChars":39,"textLines":1,"bbox":[452,592,640,28]}
+{"kind":"notes","id":"nt/kweb8o","slide":2,"text":""}
+{"kind":"slide","id":"sl/llu75h","slide":3,"title":"추천 정확도는 세 층의 데이터가 함께 쌓일 때 올라간다","textShapes":10}
+{"kind":"textbox","id":"sh/dsji5sne","slide":3,"text":"추천 정확도는 세 층의 데이터가 함께 쌓일 때 올라간다","textPreview":"추천 정확도는 세 층의 데이터가 함께 쌓일 때 올라간다","textChars":30,"textLines":1,"bbox":[54,44,980,44]}
+{"kind":"textbox","id":"sh/61032lsz","slide":3,"text":"9. 데이터 확보 전략","textPreview":"9. 데이터 확보 전략","textChars":12,"textLines":1,"bbox":[54,92,260,24]}
+{"kind":"shape","id":"sh/vmtwra5g","slide":3,"bbox":[54,126,1172,0]}
+{"kind":"shape","id":"sh/oj2t83it","slide":3,"bbox":[54,170,344,360]}
+{"kind":"textbox","id":"sh/d4vmtwra","slide":3,"text":"STEP 1. 기본 장소 데이터","textPreview":"STEP 1. 기본 장소 데이터","textChars":17,"textLines":1,"bbox":[72,184,308,34]}
+{"kind":"textbox","id":"sh/6dcbulwv","slide":3,"text":"• Google Places API 기반\n• 위치, 평점, 리뷰 수, 영업시간, 웹사이트\n• 지도 위 추천 후보를 구성하는 기본 레이어","textPreview":"• Google Places API 기반 | • 위치, 평점, 리뷰 수, 영업시간, 웹사이트 | • 지도 위 추천 후보를 구성하는 기본 레이어","textChars":75,"textLines":3,"bbox":[72,228,308,288]}
+{"kind":"shape","id":"sh/vy90je9c","slide":3,"bbox":[418,170,344,360]}
+{"kind":"textbox","id":"sh/onyd0z61","slide":3,"text":"STEP 2. 운영자 큐레이션","textPreview":"STEP 2. 운영자 큐레이션","textChars":16,"textLines":1,"bbox":[436,184,308,34]}
+{"kind":"textbox","id":"sh/d8v6psfi","slide":3,"text":"• PB상품 강점, 관광객 적합도, 가격대\n• 하몽·치즈·올리브오일 등 품목별 특성 정리\n• 마트의 역할과 추천 맥락을 설명하는 차별화 데이터","textPreview":"• PB상품 강점, 관광객 적합도, 가격대 | • 하몽·치즈·올리브오일 등 품목별 특성 정리 | • 마트의 역할과 추천 맥락을 설명하는 차별화 데이터","textChars":79,"textLines":3,"bbox":[436,228,308,288]}
+{"kind":"shape","id":"sh/twra5gbq","slide":3,"bbox":[782,170,388,360]}
+{"kind":"textbox","id":"sh/4byhgn29","slide":3,"text":"STEP 3. 사용자 생성 데이터","textPreview":"STEP 3. 사용자 생성 데이터","textChars":18,"textLines":1,"bbox":[800,184,352,34]}
+{"kind":"textbox","id":"sh/bq1oryts","slide":3,"text":"• 실제 구매 가격, 품절 여부, 할인 정보\n• 사진 후기, 만족도, 방문 시간\n• 축적될수록 더 최신성 높은 추천 가능","textPreview":"• 실제 구매 가격, 품절 여부, 할인 정보 | • 사진 후기, 만족도, 방문 시간 | • 축적될수록 더 최신성 높은 추천 가능","textChars":67,"textLines":3,"bbox":[800,228,352,288]}
+{"kind":"textbox","id":"sh/m58z25kb","slide":3,"text":"데이터 흐름","textPreview":"데이터 흐름","textChars":6,"textLines":1,"bbox":[54,564,120,24]}
+{"kind":"shape","id":"sh/t83itgfm","slide":3,"bbox":[54,594,1116,70]}
+{"kind":"textbox","id":"sh/4nap4r65","slide":3,"text":"공개 데이터로 시작 → 운영자 해석으로 의미를 부여 → 사용자 경험 데이터로 최신성과 신뢰도를 강화","textPreview":"공개 데이터로 시작 → 운영자 해석으로 의미를 부여 → 사용자 경험 데이터로 최신성과 신뢰도를 강화","textChars":55,"textLines":1,"bbox":[80,614,1060,30]}
+{"kind":"notes","id":"nt/llu75h","slide":3,"text":""}
+{"kind":"slide","id":"sl/cuby7o","slide":4,"title":"MVP는 좁은 범위에서 추천이 실제로 유용한지 검증하는 단계다","textShapes":10}
+{"kind":"textbox","id":"sh/3m94fu18","slide":4,"text":"MVP는 좁은 범위에서 추천이 실제로 유용한지 검증하는 단계다","textPreview":"MVP는 좁은 범위에서 추천이 실제로 유용한지 검증하는 단계다","textChars":34,"textLines":1,"bbox":[54,44,1080,44]}
+{"kind":"textbox","id":"sh/s72x4nap","slide":4,"text":"10. MVP","textPreview":"10. MVP","textChars":7,"textLines":1,"bbox":[54,92,120,24]}
+{"kind":"shape","id":"sh/lszqtcj6","slide":4,"bbox":[54,126,1172,0]}
+{"kind":"shape","id":"sh/adsji5sn","slide":4,"bbox":[54,170,360,240]}
+{"kind":"textbox","id":"sh/3ylc7u54","slide":4,"text":"검증 범위","textPreview":"검증 범위","textChars":5,"textLines":1,"bbox":[72,184,324,34]}
+{"kind":"textbox","id":"sh/sji5snel","slide":4,"text":"• 지역: 마드리드 Salamanca\n• 대상: 대표 마트 5곳\n• 품목: 하몽, 치즈, 올리브오일, 빠에야 재료, PB상품","textPreview":"• 지역: 마드리드 Salamanca | • 대상: 대표 마트 5곳 | • 품목: 하몽, 치즈, 올리브오일, 빠에야 재료, PB상품","textChars":69,"textLines":3,"bbox":[72,228,324,168]}
+{"kind":"shape","id":"sh/h4byhgn2","slide":4,"bbox":[432,170,360,240]}
+{"kind":"textbox","id":"sh/ap4r65wj","slide":4,"text":"우선 구현 기능","textPreview":"우선 구현 기능","textChars":8,"textLines":1,"bbox":[450,184,324,34]}
+{"kind":"textbox","id":"sh/za1gvy90","slide":4,"text":"• 검색어 입력\n• 단기/장기 모드\n• 예산·인원·체류기간 반영\n• 추천 랭킹, 지도, 추천 이유 설명","textPreview":"• 검색어 입력 | • 단기/장기 모드 | • 예산·인원·체류기간 반영 | • 추천 랭킹, 지도, 추천 이유 설명","textChars":57,"textLines":4,"bbox":[450,228,324,168]}
+{"kind":"shape","id":"sh/z61032ls","slide":4,"bbox":[810,170,360,240]}
+{"kind":"textbox","id":"sh/al87ed8b","slide":4,"text":"검증 목표","textPreview":"검증 목표","textChars":5,"textLines":1,"bbox":[828,184,324,34]}
+{"kind":"textbox","id":"sh/hcrmhk3q","slide":4,"text":"• 추천 결과가 실제 구매 결정에 도움이 되는지 확인\n• 사용자 피드백을 모아 추천 기준 보정\n• 향후 지역 확대 전 핵심 가설 검증","textPreview":"• 추천 결과가 실제 구매 결정에 도움이 되는지 확인 | • 사용자 피드백을 모아 추천 기준 보정 | • 향후 지역 확대 전 핵심 가설 검증","textChars":74,"textLines":3,"bbox":[828,228,324,168]}
+{"kind":"shape","id":"sh/orytsvu9","slide":4,"bbox":[54,450,1116,164]}
+{"kind":"textbox","id":"sh/zupwb2hw","slide":4,"text":"MVP의 의미","textPreview":"MVP의 의미","textChars":7,"textLines":1,"bbox":[80,474,180,28]}
+{"kind":"textbox","id":"sh/a9w3m94f","slide":4,"text":"처음부터 모든 도시와 모든 마트를 다루는 것이 목표가 아니다.\n먼저 마드리드의 제한된 지역과 대표 마트에서 AI 추천이 실제로 선택 시간을 줄이고 구매 만족도를 높이는지 확인한다.","textPreview":"처음부터 모든 도시와 모든 마트를 다루는 것이 목표가 아니다. | 먼저 마드리드의 제한된 지역과 대표 마트에서 AI 추천이 실제로 선택 시간을 줄이고 구매 만족도를 높이는지 확인한다.","textChars":100,"textLines":2,"bbox":[80,518,1020,72]}
+{"kind":"notes","id":"nt/cuby7o","slide":4,"text":""}

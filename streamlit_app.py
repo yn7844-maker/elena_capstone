@@ -17,6 +17,7 @@ st.set_page_config(
 
 CSV_PATH = Path(__file__).resolve().parent / "outputs" / "selected_madrid_marts.csv"
 ENRICHED_CATEGORY_PATH = Path(__file__).resolve().parent / "outputs" / "product_category_enriched_final.csv"
+FOCUSED_PRODUCT_PATH = Path(__file__).resolve().parent / "outputs" / "focused_product_list_3categories.csv"
 FONT_PATH = Path("/Users/elena/Downloads/Pretendard-1.3.9 (1)/public/static/Pretendard-Medium.otf")
 
 MART_METADATA = {
@@ -131,8 +132,16 @@ def load_category_data() -> pd.DataFrame:
     return pd.read_csv(ENRICHED_CATEGORY_PATH)
 
 
+def load_focused_product_data() -> pd.DataFrame:
+    return pd.read_csv(FOCUSED_PRODUCT_PATH)
+
+
 def get_category_options(category_df: pd.DataFrame) -> list[str]:
     return category_df["category"].dropna().drop_duplicates().tolist()
+
+
+def get_supported_search_options() -> list[str]:
+    return ["하몽", "치즈", "올리브오일"]
 
 
 def attach_category_context(catalog_df: pd.DataFrame, category_df: pd.DataFrame, selected_category: str) -> pd.DataFrame:
@@ -317,40 +326,118 @@ def format_copy_blocks(text: str) -> str:
     return "\n\n".join(chunks)
 
 
-def build_sample_reviews(mart_name: str, category: str, mode: str) -> list[tuple[str, str]]:
+def render_star_rating(score: int) -> str:
+    filled = "★" * max(0, min(int(score), 5))
+    empty = "☆" * max(0, 5 - min(int(score), 5))
+    return f"{filled}{empty}"
+
+
+def build_discount_note(mart_name: str, category: str) -> str:
+    notes = {
+        "El Corte Inglés Serrano": f"{category} 할인 정보는 아직 많지 않아요. 대신 시즌 기프트 세트나 묶음 구성이 올라오는 편이에요.",
+        "Mercado de la Paz": f"{category}는 정가 할인보다는 당일 컨디션이나 점포별 구성이 더 크게 느껴지는 편이에요.",
+        "Sánchez Romero": f"{category} 할인은 자주 보이진 않지만, 프리미엄 수입 식재료 행사 제보가 들어오면 바로 반영할 수 있어요.",
+        "Mercadona": f"{category}는 큰 폭의 행사보다 일상 가격이 안정적인 편이에요. 생활형 장보기 기준으로 비교하기 좋아요.",
+        "Carrefour Express": f"{category}는 시간대별 프로모션이나 간편식 묶음 제보가 들어오면 빠르게 반영하기 좋아요.",
+    }
+    return notes.get(mart_name, f"{category} 할인 정보가 들어오면 이곳에서 바로 확인할 수 있어요.")
+
+
+def format_price_label(price: float, price_type: str, price_note: str) -> str:
+    return f"가격 EUR {float(price):.2f}"
+
+
+def format_price_caption(price_type: str, price_note: str) -> str:
+    base = str(price_note or "").strip()
+    if price_type == "exact_catalog":
+        return f"{base} · 실제 카탈로그 기준"
+    if price_type == "proxy_catalog":
+        return f"{base} · 체인 카탈로그 기준"
+    if price_type == "article_mentioned":
+        return f"{base} · 기사 언급 기준"
+    return f"{base} · 매장 성격 기반 추정"
+
+
+def build_sample_reviews(mart_name: str, category: str, mode: str) -> list[dict]:
     mart_reviews = {
         "El Corte Inglés Serrano": [
-            ("seoyeon", f"{category}를 선물용으로 고르기 편했고 매장이 정돈돼 있어서 초행자도 부담이 적었어요."),
-            ("mina", "관광객 입장에서 브랜드를 비교하기 쉬웠고, 기념품처럼 사가기 좋은 느낌이 있었어요."),
-            ("jiyoon", "급하게 들렀는데도 동선이 편해서 필요한 품목을 빠르게 찾을 수 있었어요."),
+            {"author": "seoyeon", "rating": 4, "availability": "판매 중 봤어요", "text": f"{category}를 선물용으로 고르기 편했고 매장이 정돈돼 있어서 초행자도 부담이 적었어요."},
+            {"author": "mina", "rating": 5, "availability": "판매 중 봤어요", "text": "관광객 입장에서 브랜드를 비교하기 쉬웠고, 기념품처럼 사가기 좋은 느낌이 있었어요."},
+            {"author": "jiyoon", "rating": 4, "availability": "판매 중 봤어요", "text": "급하게 들렀는데도 동선이 편해서 필요한 품목을 빠르게 찾을 수 있었어요."},
         ],
         "Mercado de la Paz": [
-            ("eunchae", f"{category}를 사러 갔는데 일반 마트보다 시장 느낌이 강해서 구경하는 재미가 컸어요."),
-            ("soyoung", "생활용품 장보기보다는 신선식품이나 하몽, 치즈 같은 재료를 사러 갈 때 더 잘 맞는 곳 같아요."),
-            ("jiwon", "관광객 입장에서는 현지 장보기 경험이 살아 있어서 기억에 남는 매장이었어요."),
+            {"author": "eunchae", "rating": 5, "availability": "판매 중 봤어요", "text": f"{category}를 사러 갔는데 일반 마트보다 시장 느낌이 강해서 구경하는 재미가 컸어요."},
+            {"author": "soyoung", "rating": 4, "availability": "판매 중 봤어요", "text": "생활용품 장보기보다는 신선식품이나 하몽, 치즈 같은 재료를 사러 갈 때 더 잘 맞는 곳 같아요."},
+            {"author": "jiwon", "rating": 4, "availability": "판매 중 봤어요", "text": "관광객 입장에서는 현지 장보기 경험이 살아 있어서 기억에 남는 매장이었어요."},
         ],
         "Sánchez Romero": [
-            ("chaewon", f"{category} 코너가 깔끔하게 정리돼 있어서 비교해 보기 좋았어요."),
-            ("hyerin", "가격은 가볍지 않지만 치즈, 하몽, 와인처럼 프리미엄 식재료를 볼 때 만족도가 높았어요."),
-            ("yuna", "시장처럼 활기찬 느낌보다는 조용하고 정돈된 슈퍼마켓을 선호하면 잘 맞아요."),
+            {"author": "chaewon", "rating": 4, "availability": "판매 중 봤어요", "text": f"{category} 코너가 깔끔하게 정리돼 있어서 비교해 보기 좋았어요."},
+            {"author": "hyerin", "rating": 5, "availability": "판매 중 봤어요", "text": "가격은 가볍지 않지만 치즈, 하몽, 와인처럼 프리미엄 식재료를 볼 때 만족도가 높았어요."},
+            {"author": "yuna", "rating": 4, "availability": "판매 중 봤어요", "text": "시장처럼 활기찬 느낌보다는 조용하고 정돈된 슈퍼마켓을 선호하면 잘 맞아요."},
         ],
         "Mercadona": [
-            ("areum", f"{category}를 생활형 장보기 기준으로 보기 좋았고, 가격 감각을 잡기 쉬웠어요."),
-            ("minseo", "유학생이나 장기 체류자라면 반복 구매 품목을 고르기에 가장 무난한 마트 같아요."),
-            ("dahye", "화려하진 않지만 일상 장보기에 필요한 것들을 안정적으로 채우기 좋았어요."),
+            {"author": "areum", "rating": 4, "availability": "판매 중 봤어요", "text": f"{category}를 생활형 장보기 기준으로 보기 좋았고, 가격 감각을 잡기 쉬웠어요."},
+            {"author": "minseo", "rating": 5, "availability": "판매 중 봤어요", "text": "유학생이나 장기 체류자라면 반복 구매 품목을 고르기에 가장 무난한 마트 같아요."},
+            {"author": "dahye", "rating": 4, "availability": "판매 중 봤어요", "text": "화려하진 않지만 일상 장보기에 필요한 것들을 안정적으로 채우기 좋았어요."},
         ],
         "Carrefour Express": [
-            ("nayeon", f"{category}가 급하게 필요할 때 늦은 시간에도 들를 수 있어서 편했어요."),
-            ("sejin", "냉동식품이나 즉석식품, 생활용품처럼 바로 필요한 품목을 보충할 때 특히 유용했어요."),
-            ("haeun", "프리미엄 장보기보다는 빠르고 실용적인 장보기에 더 잘 맞는 매장이에요."),
+            {"author": "nayeon", "rating": 4, "availability": "판매 중 봤어요", "text": f"{category}가 급하게 필요할 때 늦은 시간에도 들를 수 있어서 편했어요."},
+            {"author": "sejin", "rating": 4, "availability": "판매 중 봤어요", "text": "냉동식품이나 즉석식품, 생활용품처럼 바로 필요한 품목을 보충할 때 특히 유용했어요."},
+            {"author": "haeun", "rating": 3, "availability": "판매 중 봤어요", "text": "프리미엄 장보기보다는 빠르고 실용적인 장보기에 더 잘 맞는 매장이에요."},
         ],
     }
     reviews = mart_reviews.get(mart_name, []).copy()
     if mode == "장기":
-        reviews.append(("soyeon", "오래 머물 때는 자주 들르게 되는데, 동선이 편한지가 꽤 크게 느껴졌어요."))
+        reviews.append({"author": "soyeon", "rating": 4, "availability": "판매 중 봤어요", "text": "오래 머물 때는 자주 들르게 되는데, 동선이 편한지가 꽤 크게 느껴졌어요."})
     else:
-        reviews.append(("jiyu", "짧게 머무는 일정에서는 분위기랑 접근성이 생각보다 크게 느껴졌어요."))
+        reviews.append({"author": "jiyu", "rating": 4, "availability": "판매 중 봤어요", "text": "짧게 머무는 일정에서는 분위기랑 접근성이 생각보다 크게 느껴졌어요."})
     return reviews[:3]
+
+
+def build_product_sample_reviews(mart_name: str, category: str, product_name: str) -> list[dict]:
+    base_reviews = {
+        "하몽": [
+            {"author": "seohyun", "rating": 4, "availability": "판매 중 봤어요", "keywords": ["맛이 좋아요"], "text": "짠맛이 과하지 않고 여행 중에 먹기에도 부담이 적었어요."},
+            {"author": "yeji", "rating": 5, "availability": "판매 중 봤어요", "keywords": ["맛이 좋아요", "양이 많아요"], "text": "와인이랑 같이 먹기 좋았고 생각보다 양도 넉넉하게 느껴졌어요."},
+        ],
+        "치즈": [
+            {"author": "yebin", "rating": 4, "availability": "판매 중 봤어요", "keywords": ["맛이 좋아요"], "text": "향이 너무 세지 않아서 처음 사보는 사람도 무난하게 먹기 좋았어요."},
+            {"author": "jiyeon", "rating": 4, "availability": "판매 중 봤어요", "keywords": ["양이 많아요"], "text": "샌드위치나 간단한 안주로 나눠 먹기 좋을 만큼 양이 괜찮았어요."},
+        ],
+        "올리브오일": [
+            {"author": "chaerin", "rating": 4, "availability": "판매 중 봤어요", "keywords": ["가격이 싸요"], "text": "현지에서 사는 느낌이 있어서 좋았고, 한국보다 가격 부담이 덜했어요."},
+            {"author": "sumin", "rating": 5, "availability": "판매 중 봤어요", "keywords": ["맛이 좋아요"], "text": "향이 깔끔해서 빵이랑 샐러드에 곁들이기 좋았어요."},
+        ],
+    }
+    return base_reviews.get(category, [])
+
+
+def build_recipe_tip(category: str, product_name: str) -> dict:
+    recipe_map = {
+        "하몽": {
+            "title": "추천 레시피 · 판 콘 토마테",
+            "ingredients": "토마토, 바게트, 올리브오일",
+            "tip": f"{product_name}는 바게트 위에 토마토를 문지르고 올리브오일을 뿌린 뒤 올려 먹으면 간단한 한 끼나 와인 안주로 잘 어울려요.",
+        },
+        "치즈": {
+            "title": "추천 레시피 · 치즈 플래터",
+            "ingredients": "바게트, 포도나 복숭아, 견과류",
+            "tip": f"{product_name}는 과일과 견과류를 곁들이면 바로 먹기 좋은 플래터가 되고, 남으면 샐러드 토핑으로도 활용하기 좋아요.",
+        },
+        "올리브오일": {
+            "title": "추천 레시피 · 토마토 샐러드",
+            "ingredients": "토마토, 소금, 후추, 빵 또는 모차렐라",
+            "tip": f"{product_name}는 토마토 위에 바로 뿌려 간단한 샐러드로 먹기 좋고, 파스타나 구운 채소 마무리용으로 써도 풍미가 잘 살아나요.",
+        },
+    }
+    return recipe_map.get(
+        category,
+        {
+            "title": "추천 레시피",
+            "ingredients": "집에 있는 간단한 재료",
+            "tip": f"{product_name}는 집에서 가볍게 곁들이기 좋은 재료예요.",
+        },
+    )
 
 
 def get_area_label(address: str) -> str:
@@ -425,9 +512,11 @@ def render_detail_contents(row: pd.Series, selected_category: str, mode: str):
         st.write(row["current_status"])
 
     st.markdown("### 다녀온 사람들 후기")
-    st.caption("직접 가본 경험을 바탕으로 정리한 후기예요.")
-    for author, review in build_sample_reviews(row["name"], selected_category, mode):
-        st.write(f"- {author}: {review}")
+    st.caption("직접 가본 경험을 바탕으로 남긴 후기예요. 판매 여부와 만족도를 함께 볼 수 있어요.")
+    for review in build_sample_reviews(row["name"], selected_category, mode):
+        st.markdown(
+            f"**{review['author']}** · {render_star_rating(review['rating'])} · {review['availability']}\n\n{review['text']}"
+        )
 
     st.markdown("### 바로 열기")
     if pd.notna(row["google_maps_url"]) and row["google_maps_url"]:
@@ -508,7 +597,8 @@ def load_font_face_css(font_path: str) -> str:
 
 catalog = build_catalog()
 category_data = load_category_data()
-category_options = get_category_options(category_data)
+focused_product_data = load_focused_product_data()
+category_options = get_supported_search_options()
 
 if "detail_mart_name" not in st.session_state:
     st.session_state["detail_mart_name"] = None
@@ -944,6 +1034,60 @@ st.markdown(
         border-color: rgba(239, 106, 72, 0.55);
         color: #ef6a48;
     }
+    .product-panel {
+        background: transparent;
+        border: none;
+        border-radius: 0;
+        padding: 0.15rem 0 0.4rem 0;
+        box-shadow: none;
+        height: 100%;
+    }
+    .product-section {
+        padding: 0.35rem 0 0.95rem 0;
+    }
+    .product-section + .product-section {
+        border-top: 1px solid #ebe3d8;
+        margin-top: 0.2rem;
+        padding-top: 1rem;
+    }
+    .product-mart {
+        color: #201b17;
+        font-size: 1rem;
+        font-weight: 800;
+        margin-bottom: 0.1rem;
+    }
+    .product-meta {
+        color: #8b7760;
+        font-size: 0.83rem;
+        margin-bottom: 0.55rem;
+    }
+    .product-item {
+        background: #fbfaf7;
+        border: 1px solid rgba(231, 223, 212, 0.92);
+        border-radius: 16px;
+        padding: 0.7rem 0.8rem;
+        margin-bottom: 0.5rem;
+    }
+    .product-name {
+        color: #221d18;
+        font-size: 0.94rem;
+        font-weight: 700;
+        line-height: 1.45;
+        word-break: keep-all;
+        overflow-wrap: break-word;
+    }
+    .product-price {
+        color: #ef6a48;
+        font-size: 0.9rem;
+        font-weight: 800;
+        margin-top: 0.18rem;
+    }
+    .product-note {
+        color: #8b7760;
+        font-size: 0.78rem;
+        margin-top: 0.14rem;
+        line-height: 1.45;
+    }
     .anchor-card {
         background: linear-gradient(180deg, #fff9ef 0%, #f6efe1 100%);
         border: 1px solid rgba(224, 206, 170, 0.95);
@@ -991,7 +1135,7 @@ top_a, top_b = st.columns([4.8, 1.2], gap="small")
 with top_a:
     search_query = st.text_input(
         "검색",
-        placeholder="하몽, PB상품, 빠에야 재료, 생활 용품처럼 검색",
+        placeholder="하몽, 치즈, 올리브오일처럼 검색",
         label_visibility="collapsed",
     )
 with top_b:
@@ -1002,7 +1146,7 @@ with top_b:
         label_visibility="collapsed",
     )
 st.markdown("</div>", unsafe_allow_html=True)
-st.markdown("<div class='search-helper'>예) 하몽, 치즈, 올리브오일, 납작 복숭아 등</div>", unsafe_allow_html=True)
+st.markdown("<div class='search-helper'>예) 하몽, 치즈, 올리브오일</div>", unsafe_allow_html=True)
 
 mission = category_options[0]
 
@@ -1109,7 +1253,15 @@ st.markdown(
 
 st.markdown('<div class="shell">', unsafe_allow_html=True)
 
-left_col, center_col = st.columns([1.15, 1.85], gap="medium")
+product_panel_df = focused_product_data[focused_product_data["category_ko"] == selected_category].copy()
+product_panel_df["mart_name"] = pd.Categorical(
+    product_panel_df["mart_name"],
+    categories=working["name"].tolist(),
+    ordered=True,
+)
+product_panel_df = product_panel_df.sort_values(["mart_name", "price_eur"]).reset_index(drop=True)
+
+left_col, center_col, right_col = st.columns([1.05, 1.45, 1.05], gap="medium")
 
 with left_col:
     st.markdown("<div class='left-panel'>", unsafe_allow_html=True)
@@ -1274,6 +1426,91 @@ with center_col:
             """,
             unsafe_allow_html=True,
         )
+
+with right_col:
+    st.markdown("<div class='product-panel'>", unsafe_allow_html=True)
+    st.subheader("상품 리스트")
+    st.caption(f"{selected_category} 검색 시 마트별로 먼저 볼 만한 대표 상품이에요.")
+    if product_panel_df.empty:
+        st.info("이 품목은 아직 상품 리스트가 준비되지 않았어요.")
+    else:
+        for mart_name in working["name"].tolist():
+            mart_products = product_panel_df[product_panel_df["mart_name"] == mart_name]
+            if mart_products.empty:
+                continue
+            mart_meta = working[working["name"] == mart_name].iloc[0]
+            st.markdown(
+                f"""
+                <div class="product-section">
+                  <div class="product-mart">{mart_name}</div>
+                  <div class="product-meta">평점 {mart_meta['rating']} · {mart_meta['address'].split(',')[1].strip()}</div>
+                """,
+                unsafe_allow_html=True,
+            )
+            for _, item in mart_products.iterrows():
+                product_key = f"{mart_name}_{item['product_name_display']}".replace(" ", "_").replace("/", "_")
+                st.markdown(
+                    f"""
+                    <div class="product-item">
+                      <div class="product-name">{item['product_name_display']}</div>
+                      <div class="product-price">{format_price_label(item['price_eur'], item['price_type'], item['price_note'])}</div>
+                      <div class="product-note">{format_price_caption(item['price_type'], item['price_note'])}</div>
+                    </div>
+                    """,
+                    unsafe_allow_html=True,
+                )
+                with st.expander("제품별 상세 리뷰", expanded=False):
+                    st.caption("이 상품에 대한 실제 사용 후기를 모으는 영역이에요.")
+                    for review in build_product_sample_reviews(mart_name, selected_category, item["product_name_display"]):
+                        keywords = " · ".join(review["keywords"])
+                        st.markdown(
+                            f"**{review['author']}** · {render_star_rating(review['rating'])} · {review['availability']}\n\n`{keywords}`\n\n{review['text']}"
+                        )
+                    if mode == "장기":
+                        recipe_tip = build_recipe_tip(selected_category, item["product_name_display"])
+                        st.info(
+                            f"**{recipe_tip['title']}**\n\n"
+                            f"같이 준비하면 좋아요: {recipe_tip['ingredients']}\n\n"
+                            f"{recipe_tip['tip']}"
+                        )
+
+                    sale_status = st.selectbox(
+                        "판매 여부",
+                        options=["판매 중 봤어요", "품절이었어요", "못 봤어요"],
+                        key=f"prod_status_{product_key}",
+                    )
+                    satisfaction = st.radio(
+                        "상품 만족도",
+                        options=[1, 2, 3, 4, 5],
+                        index=3,
+                        key=f"prod_rating_{product_key}",
+                        format_func=lambda value: render_star_rating(value),
+                        horizontal=True,
+                    )
+                    selected_keywords = st.multiselect(
+                        "키워드 선택",
+                        options=["가격이 싸요", "맛이 좋아요", "양이 많아요"],
+                        key=f"prod_keywords_{product_key}",
+                        placeholder="리뷰에 맞는 키워드를 골라주세요.",
+                    )
+                    review_text = st.text_area(
+                        "한 줄 후기",
+                        key=f"prod_text_{product_key}",
+                        height=90,
+                        placeholder=f"{item['product_name_display']} 먹어본 느낌이나 가성비, 양에 대한 인상을 적어주세요.",
+                    )
+                    selected_keyword_text = " · ".join(selected_keywords) if selected_keywords else "선택한 키워드 없음"
+                    st.caption(
+                        f"선택한 판매 여부: {sale_status} · 만족도: {render_star_rating(satisfaction)} · 키워드: {selected_keyword_text}"
+                    )
+                    if st.button("리뷰 작성 예시 보기", key=f"prod_preview_{product_key}"):
+                        preview_text = review_text.strip() or f"{item['product_name_display']}는 생각보다 고르기 쉬웠고 전체적으로 만족스러웠어요."
+                        st.success("이런 형식으로 제품별 리뷰가 쌓이면 추천 품질이 더 좋아져요.")
+                        st.markdown(
+                            f"**{item['product_name_display']} 리뷰 예시**\n\n- 판매 여부: {sale_status}\n- 만족도: {render_star_rating(satisfaction)}\n- 키워드: {selected_keyword_text}\n- 후기: {preview_text}"
+                        )
+            st.markdown("</div>", unsafe_allow_html=True)
+    st.markdown("</div>", unsafe_allow_html=True)
 
 st.markdown("</div>", unsafe_allow_html=True)
 
