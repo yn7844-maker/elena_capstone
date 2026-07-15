@@ -395,21 +395,75 @@ def build_sample_reviews(mart_name: str, category: str, mode: str) -> list[dict]
 
 
 def build_product_sample_reviews(mart_name: str, category: str, product_name: str) -> list[dict]:
-    base_reviews = {
-        "하몽": [
-            {"author": "seohyun", "rating": 4, "availability": "판매 중 봤어요", "keywords": ["맛이 좋아요"], "text": "짠맛이 과하지 않고 여행 중에 먹기에도 부담이 적었어요."},
-            {"author": "yeji", "rating": 5, "availability": "판매 중 봤어요", "keywords": ["맛이 좋아요", "양이 많아요"], "text": "와인이랑 같이 먹기 좋았고 생각보다 양도 넉넉하게 느껴졌어요."},
-        ],
-        "치즈": [
-            {"author": "yebin", "rating": 4, "availability": "판매 중 봤어요", "keywords": ["맛이 좋아요"], "text": "향이 너무 세지 않아서 처음 사보는 사람도 무난하게 먹기 좋았어요."},
-            {"author": "jiyeon", "rating": 4, "availability": "판매 중 봤어요", "keywords": ["양이 많아요"], "text": "샌드위치나 간단한 안주로 나눠 먹기 좋을 만큼 양이 괜찮았어요."},
-        ],
-        "올리브오일": [
-            {"author": "chaerin", "rating": 4, "availability": "판매 중 봤어요", "keywords": ["가격이 싸요"], "text": "현지에서 사는 느낌이 있어서 좋았고, 한국보다 가격 부담이 덜했어요."},
-            {"author": "sumin", "rating": 5, "availability": "판매 중 봤어요", "keywords": ["맛이 좋아요"], "text": "향이 깔끔해서 빵이랑 샐러드에 곁들이기 좋았어요."},
-        ],
+    reviews_by_category = {
+        "하몽": {
+            "El Corte Inglés Serrano": [
+                {"author": "seohyun", "rating": 4, "availability": "판매 중 봤어요", "keywords": ["맛이 좋아요"], "text": f"{product_name}는 포장이나 진열이 깔끔해서 고르기 쉬웠어요. 다만 생활형 장보기 기준으로는 가격이 조금 높은 편이었어요."},
+                {"author": "yeji", "rating": 4, "availability": "판매 중 봤어요", "keywords": ["맛이 좋아요"], "text": "선물용으로는 만족스러웠는데, 양 대비 가볍게 사기엔 조금 부담이 있었어요."},
+            ],
+            "Mercado de la Paz": [
+                {"author": "hyemi", "rating": 5, "availability": "판매 중 봤어요", "keywords": ["맛이 좋아요"], "text": f"{product_name}는 시장에서 고르는 느낌이 살아 있어서 기억에 남았어요. 대신 처음 가면 어떤 매대를 봐야 할지 조금 헷갈릴 수 있어요."},
+                {"author": "yuri", "rating": 4, "availability": "판매 중 봤어요", "keywords": ["맛이 좋아요", "양이 많아요"], "text": "맛은 정말 좋았고 현지 느낌도 강했어요. 다만 빠르게 사고 나오기보다는 천천히 둘러봐야 했어요."},
+            ],
+            "Sánchez Romero": [
+                {"author": "narin", "rating": 4, "availability": "판매 중 봤어요", "keywords": ["맛이 좋아요"], "text": f"{product_name}는 정돈된 분위기에서 비교해 보기 좋았어요. 대신 가격 메리트가 크다기보다는 프리미엄 쪽에 가까웠어요."},
+                {"author": "gaeun", "rating": 4, "availability": "판매 중 봤어요", "keywords": ["맛이 좋아요"], "text": "깔끔하고 조용하게 고르기 좋았는데, 현지 시장처럼 구경하는 재미는 조금 덜했어요."},
+            ],
+            "Mercadona": [
+                {"author": "haneul", "rating": 3, "availability": "판매 중 봤어요", "keywords": ["가격이 싸요"], "text": f"{product_name}는 무난하게 사기 좋았고 가격 감각 잡기에는 괜찮았어요. 대신 특별히 고급스럽다는 느낌은 약했어요."},
+                {"author": "sujin", "rating": 4, "availability": "판매 중 봤어요", "keywords": ["가격이 싸요"], "text": "매일 장보는 기준에서는 편했어요. 선물용으로 보기엔 조금 평범하게 느껴졌어요."},
+            ],
+            "Carrefour Express": [
+                {"author": "jiu", "rating": 3, "availability": "판매 중 봤어요", "keywords": ["가격이 싸요"], "text": f"{product_name}를 급하게 사기에는 편했어요. 다만 선택지가 많지는 않아서 비교해서 고르기엔 조금 아쉬웠어요."},
+                {"author": "sohee", "rating": 3, "availability": "판매 중 봤어요", "keywords": ["양이 많아요"], "text": "늦은 시간에 바로 살 수 있는 건 좋았어요. 대신 프리미엄 느낌이나 현지 체험감은 약했어요."},
+            ],
+        },
+        "치즈": {
+            "El Corte Inglés Serrano": [
+                {"author": "yebin", "rating": 4, "availability": "판매 중 봤어요", "keywords": ["맛이 좋아요"], "text": f"{product_name}는 처음 보는 사람도 고르기 편했어요. 다만 생활형으로 자주 사 먹기엔 가격이 조금 센 편이었어요."},
+                {"author": "ara", "rating": 4, "availability": "판매 중 봤어요", "keywords": ["맛이 좋아요"], "text": "와인 안주용으로는 만족스러웠어요. 대신 너무 다양한 만큼 빨리 결정하기는 조금 어려웠어요."},
+            ],
+            "Mercado de la Paz": [
+                {"author": "jiyeon", "rating": 5, "availability": "판매 중 봤어요", "keywords": ["맛이 좋아요"], "text": f"{product_name}는 시장에서 바로 추천받는 느낌이 있어서 좋았어요. 다만 매장형 마트처럼 한눈에 정리돼 있지는 않았어요."},
+                {"author": "nahee", "rating": 4, "availability": "판매 중 봤어요", "keywords": ["양이 많아요"], "text": "조금씩 여러 종류를 보기 좋았어요. 대신 생활용품까지 한 번에 해결하는 동선은 아니었어요."},
+            ],
+            "Sánchez Romero": [
+                {"author": "hyunji", "rating": 5, "availability": "판매 중 봤어요", "keywords": ["맛이 좋아요"], "text": f"{product_name}는 확실히 정돈된 느낌이 있었고, 치즈 좋아하면 만족도가 높을 것 같아요. 대신 가격은 가볍지 않았어요."},
+                {"author": "dayeon", "rating": 4, "availability": "판매 중 봤어요", "keywords": ["맛이 좋아요"], "text": "품질은 좋았는데, 가성비를 기대하고 들어가면 조금 아쉬울 수 있어요."},
+            ],
+            "Mercadona": [
+                {"author": "yerim", "rating": 4, "availability": "판매 중 봤어요", "keywords": ["가격이 싸요"], "text": f"{product_name}는 생활형으로 사기 부담이 적었어요. 대신 선물용으로 특별해 보이는 느낌은 약했어요."},
+                {"author": "eunjin", "rating": 3, "availability": "판매 중 봤어요", "keywords": ["가격이 싸요", "양이 많아요"], "text": "양 대비 무난했지만, 치즈 자체의 개성이 강하진 않았어요."},
+            ],
+            "Carrefour Express": [
+                {"author": "hayoon", "rating": 3, "availability": "판매 중 봤어요", "keywords": ["양이 많아요"], "text": f"{product_name}는 간단히 집어오기엔 괜찮았어요. 대신 선택지가 적어서 치즈 비교용으로는 아쉬웠어요."},
+                {"author": "seoa", "rating": 3, "availability": "판매 중 봤어요", "keywords": ["가격이 싸요"], "text": "급하게 사기엔 편했지만, 맛이나 종류 면에서 기억에 남는 편은 아니었어요."},
+            ],
+        },
+        "올리브오일": {
+            "El Corte Inglés Serrano": [
+                {"author": "chaerin", "rating": 4, "availability": "판매 중 봤어요", "keywords": ["맛이 좋아요"], "text": f"{product_name}는 브랜드 비교하기 좋았고 선물용으로도 괜찮아 보였어요. 다만 대형 마트보다 가격 메리트는 크지 않았어요."},
+                {"author": "sumin", "rating": 4, "availability": "판매 중 봤어요", "keywords": ["맛이 좋아요"], "text": "설명 보기엔 좋았는데, 집에서 막 쓰는 용도로 사기엔 조금 아깝게 느껴졌어요."},
+            ],
+            "Mercado de la Paz": [
+                {"author": "haein", "rating": 4, "availability": "판매 중 봤어요", "keywords": ["맛이 좋아요"], "text": f"{product_name}는 현지에서 고른다는 느낌이 살아 있었어요. 대신 병 크기나 가격을 빠르게 비교하긴 조금 어려웠어요."},
+                {"author": "jimin", "rating": 4, "availability": "판매 중 봤어요", "keywords": ["맛이 좋아요"], "text": "기념품처럼 사 가기엔 좋았어요. 생활형으로 대용량을 찾는 사람에겐 덜 맞을 수 있어요."},
+            ],
+            "Sánchez Romero": [
+                {"author": "sua", "rating": 4, "availability": "판매 중 봤어요", "keywords": ["맛이 좋아요"], "text": f"{product_name}는 고급스럽고 정돈된 느낌이 강했어요. 다만 일상적으로 쓰기엔 가격대가 조금 높게 느껴졌어요."},
+                {"author": "yewon", "rating": 4, "availability": "판매 중 봤어요", "keywords": ["맛이 좋아요"], "text": "브랜드 퀄리티는 좋았는데, 가볍게 여러 병 사기엔 부담이 있었어요."},
+            ],
+            "Mercadona": [
+                {"author": "naye", "rating": 4, "availability": "판매 중 봤어요", "keywords": ["가격이 싸요"], "text": f"{product_name}는 집에서 자주 쓰기 좋았고 가격도 안정적이었어요. 대신 선물용으로 특별한 느낌은 덜했어요."},
+                {"author": "rina", "rating": 4, "availability": "판매 중 봤어요", "keywords": ["가격이 싸요"], "text": "생활형 기준으론 가장 무난했어요. 풍미 차이를 크게 따지는 사람에겐 조금 평범하게 느껴질 수 있어요."},
+            ],
+            "Carrefour Express": [
+                {"author": "chaehee", "rating": 3, "availability": "판매 중 봤어요", "keywords": ["가격이 싸요"], "text": f"{product_name}는 급하게 필요할 때 사기 편했어요. 대신 용량이나 브랜드 선택이 넓진 않았어요."},
+                {"author": "danbi", "rating": 3, "availability": "판매 중 봤어요", "keywords": ["가격이 싸요"], "text": "바로 쓰기엔 괜찮았지만, 올리브오일 자체를 비교해서 고르는 재미는 적었어요."},
+            ],
+        },
     }
-    return base_reviews.get(category, [])
+    return reviews_by_category.get(category, {}).get(mart_name, [])
 
 
 def build_recipe_tip(category: str, product_name: str) -> dict:
