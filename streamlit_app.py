@@ -396,6 +396,33 @@ def build_sample_reviews(mart_name: str, category: str, mode: str) -> list[dict]
 
 def build_product_sample_reviews(mart_name: str, category: str, product_name: str) -> list[dict]:
     lowered = product_name.lower()
+    reviewer_pool = [
+        "seohyun",
+        "yeji",
+        "minji",
+        "jiae",
+        "sua",
+        "yebin",
+        "gyuri",
+        "somin",
+        "chaerin",
+        "hyerin",
+        "jiwoo",
+        "dabin",
+        "nayoung",
+        "sohee",
+        "yerin",
+        "haeun",
+        "minseo",
+        "jiyeon",
+        "areum",
+        "sejin",
+    ]
+
+    base_seed = sum(ord(char) for char in f"{mart_name}|{category}|{product_name}")
+
+    def pick_reviewer(offset: int) -> str:
+        return reviewer_pool[(base_seed + offset) % len(reviewer_pool)]
 
     def product_detail_lines() -> tuple[str, str]:
         if category == "하몽":
@@ -563,49 +590,49 @@ def build_product_sample_reviews(mart_name: str, category: str, product_name: st
     extra_lines = extra_variation.get(mart_name, ["전체적으로 무난했지만, 아주 강한 인상을 남기는 타입은 아니었어요."])
 
     review_one = {
-        "author": "seohyun",
+        "author": pick_reviewer(1),
         "rating": tone["rating"],
         "availability": "판매 중 봤어요",
         "keywords": tone["keywords"],
         "text": f"{detail_lines[0]} {tone['strength']}. 다만 {tone['weakness']}.",
     }
     review_two = {
-        "author": "yeji",
+        "author": pick_reviewer(7),
         "rating": max(3, tone["rating"] - 1 if mart_name in {"Mercadona", "Carrefour Express"} else tone["rating"]),
         "availability": "판매 중 봤어요",
         "keywords": ["양이 많아요"] if category != "올리브오일" else ["가격이 싸요"],
         "text": f"{detail_lines[min(1, len(detail_lines) - 1)]} {extra_lines[0]}",
     }
     if "100%" in lowered or "bellota" in lowered:
-        review_one["author"] = "hyerin"
+        review_one["author"] = pick_reviewer(3)
         review_one["rating"] = min(5, tone["rating"] + 1)
         review_one["keywords"] = ["맛이 좋아요"]
         review_one["text"] = f"{product_name}는 한 입 먹었을 때 향과 지방감이 확실히 살아 있었어요. {tone['strength']}. 대신 {tone['weakness']}."
     if "gran selección" in lowered or "gran seleccion" in lowered:
-        review_two["author"] = "minji"
+        review_two["author"] = pick_reviewer(9)
         review_two["text"] = f"{product_name}는 요리 마무리용으로 뿌렸을 때 차이가 느껴졌어요. {extra_lines[1]}"
     if "cabra" in lowered:
-        review_two["author"] = "jiae"
+        review_two["author"] = pick_reviewer(11)
         review_two["keywords"] = ["맛이 좋아요"]
         review_two["text"] = f"{product_name}는 샐러드나 플래터에 올렸을 때 향이 확 살아났어요. {extra_lines[0]}"
     if "picual" in lowered or "arbequina" in lowered:
-        review_two["author"] = "sua"
+        review_two["author"] = pick_reviewer(13)
         review_two["keywords"] = ["맛이 좋아요"]
         review_two["text"] = f"{product_name}는 품종 차이를 비교해 보고 싶은 사람에겐 재미가 있었어요. {extra_lines[1]}"
     if "serrano" in lowered:
-        review_two["author"] = "yebin"
+        review_two["author"] = pick_reviewer(15)
         review_two["keywords"] = ["가격이 싸요"]
         review_two["text"] = f"{product_name}는 부담 없이 담기 좋았고 샌드위치나 간단한 안주용으로 쓰기 편했어요. {extra_lines[1]}"
     if "manchego" in lowered:
-        review_two["author"] = "gyuri"
+        review_two["author"] = pick_reviewer(17)
         review_two["keywords"] = ["맛이 좋아요"]
         review_two["text"] = f"{product_name}는 처음 스페인 치즈를 살 때 가장 안전한 선택처럼 느껴졌어요. {extra_lines[1]}"
     if "truf" in lowered:
-        review_two["author"] = "somin"
+        review_two["author"] = pick_reviewer(19)
         review_two["keywords"] = ["맛이 좋아요"]
         review_two["text"] = f"{product_name}는 향이 강해서 와인 안주로는 좋았지만 한 번에 많이 먹기엔 진했어요. {extra_lines[0]}"
     if "carbonell" in lowered or "coosur" in lowered:
-        review_two["author"] = "chaerin"
+        review_two["author"] = pick_reviewer(5)
         review_two["keywords"] = ["가격이 싸요"]
         review_two["text"] = f"{product_name}는 요리에 편하게 쓰기 좋았고 브랜드가 익숙해서 장바구니에 담기 쉬웠어요. {extra_lines[0]}"
 
