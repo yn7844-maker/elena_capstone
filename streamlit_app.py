@@ -395,6 +395,114 @@ def build_sample_reviews(mart_name: str, category: str, mode: str) -> list[dict]
 
 
 def build_product_sample_reviews(mart_name: str, category: str, product_name: str) -> list[dict]:
+    lowered = product_name.lower()
+
+    def product_detail_lines() -> tuple[str, str]:
+        if category == "하몽":
+            if "bellota" in lowered and "100%" in lowered:
+                return (
+                    "기름기가 은은하게 퍼지고 향이 깊어서 한 입 먹었을 때 확실히 프리미엄 느낌이 있었어요.",
+                    "가격대는 높지만 여행 중 한 번 제대로 사보고 싶은 하몽으로는 만족도가 높았어요.",
+                )
+            if "bellota" in lowered:
+                return (
+                    "풍미가 진하고 씹을수록 고소한 느낌이 살아 있어서 와인 안주로 잘 어울렸어요.",
+                    "일반 하몽보다 존재감이 확실해서 특별한 날 먹기 좋았지만, 매일 꺼내 먹기엔 조금 묵직했어요.",
+                )
+            if "ibérico" in lowered or "iberico" in lowered:
+                return (
+                    "짠맛보다 감칠맛이 먼저 올라와서 빵이나 치즈랑 같이 두기 좋았어요.",
+                    "풍미는 충분히 좋았지만 벨로타 급처럼 압도적인 차이가 나진 않았어요.",
+                )
+            if "serrano" in lowered:
+                return (
+                    "익숙하고 깔끔한 맛이라 처음 하몽을 사는 사람도 부담 없이 고르기 좋았어요.",
+                    "대신 깊이감은 이베리코 계열보다 덜해서 비교하면 조금 담백하게 느껴졌어요.",
+                )
+            if "paleta" in lowered:
+                return (
+                    "결이 부드럽고 조금 더 가볍게 넘어가서 여러 명이 나눠 먹기 편했어요.",
+                    "맛 차이를 세세하게 보는 사람이 아니라면 일반 jamón과 구분이 크게 안 갈 수도 있어요.",
+                )
+            return (
+                "전체적으로 무난하게 먹기 좋았고 여행 중 간단히 사기에도 부담이 적었어요.",
+                "다만 특별한 포인트를 기대하면 조금 평범하게 느껴질 수 있었어요.",
+            )
+        if category == "치즈":
+            if "manchego" in lowered:
+                return (
+                    "스페인 대표 치즈답게 맛의 방향이 분명해서 처음 담아도 크게 실패할 느낌은 없었어요.",
+                    "입문용으로는 좋지만 강하게 기억에 남는 개성을 찾는다면 조금 얌전하게 느껴질 수 있어요.",
+                )
+            if "idiaz" in lowered or "ahumado" in lowered:
+                return (
+                    "훈연향이 은근하게 올라와서 한 조각만 먹어도 존재감이 남는 치즈였어요.",
+                    "향이 분명해서 취향은 갈릴 수 있고, 매일 먹기엔 살짝 진하게 느껴질 수 있어요.",
+                )
+            if "comté" in lowered or "comte" in lowered:
+                return (
+                    "버터 같은 고소한 느낌이 있어서 빵이랑 같이 먹으면 만족감이 확 올라갔어요.",
+                    "맛은 좋았지만 일상용보다는 조금 기분 내고 싶을 때 어울리는 가격대였어요.",
+                )
+            if "oveja" in lowered:
+                return (
+                    "양젖 치즈 특유의 진한 맛이 살아 있어서 하몽이나 와인과 같이 두기 좋았어요.",
+                    "존재감은 확실했지만 산뜻한 치즈를 기대하면 조금 무겁게 느껴질 수 있어요.",
+                )
+            if "cabra" in lowered:
+                return (
+                    "산뜻한 산미가 있어서 샐러드나 플래터에 올렸을 때 확실히 살아났어요.",
+                    "염소치즈 특유의 향이 있어 처음 먹는 사람은 취향이 갈릴 수 있어요.",
+                )
+            if "truf" in lowered:
+                return (
+                    "트러플 향이 퍼져서 한 조각만 먹어도 꽤 고급스럽게 느껴졌어요.",
+                    "개성은 확실하지만 자주 먹는 데일리 치즈로 두기엔 조금 진한 편이었어요.",
+                )
+            if "semicurado" in lowered:
+                return (
+                    "너무 세지 않고 부드럽게 넘어가서 집에서 자주 꺼내 먹기 좋았어요.",
+                    "편하게 먹기엔 좋지만 특별히 기억에 남는 포인트는 약한 편이었어요.",
+                )
+            return (
+                "전체적으로 먹기 편하고 여러 음식에 곁들이기 쉬운 타입이었어요.",
+                "특별한 개성을 기대하면 조금 평범하게 느껴질 수도 있었어요.",
+            )
+        if category == "올리브오일":
+            if "arbequina" in lowered:
+                return (
+                    "향이 부드럽고 끝맛이 깔끔해서 샐러드나 빵에 바로 쓰기 좋았어요.",
+                    "강한 올리브 향을 기대했다면 생각보다 순하게 느껴질 수 있어요.",
+                )
+            if "picual" in lowered:
+                return (
+                    "끝맛이 또렷해서 토마토나 구운 채소에 뿌리면 존재감이 분명했어요.",
+                    "향이 뚜렷한 편이라 순한 오일을 찾는 사람에겐 조금 세게 느껴질 수 있어요.",
+                )
+            if "hojiblanca" in lowered:
+                return (
+                    "균형감이 좋아서 집에서 두루 쓰기 편한 기본 오일 느낌이었어요.",
+                    "확 튀는 캐릭터보다는 여러 요리에 무난하게 맞는 쪽에 가까웠어요.",
+                )
+            if "carbonell" in lowered or "coosur" in lowered:
+                return (
+                    "익숙한 브랜드라 처음 고를 때 심리적으로 편했고 실패 확률이 낮아 보였어요.",
+                    "대신 현지에서만 사야 할 특별한 느낌은 조금 덜했어요.",
+                )
+            if "gran selección" in lowered or "gran seleccion" in lowered:
+                return (
+                    "일반 제품보다 향이 조금 더 또렷해서 요리 마무리용으로 쓰기 좋았어요.",
+                    "가격이 올라가다 보니 막 쓰는 오일보다는 아껴 쓰게 되는 느낌이었어요.",
+                )
+            return (
+                "일상적으로 자주 쓰기 좋고 요리용으로도 무난하게 활용할 수 있었어요.",
+                "대신 풍미 차이를 크게 따지는 사람에겐 조금 평이하게 느껴질 수 있어요.",
+            )
+        return (
+            f"{product_name}는 전반적으로 써보기 무난한 상품이었어요.",
+            "아주 강한 개성보다는 기본에 충실한 느낌이었어요.",
+        )
+
     mart_tone = {
         "El Corte Inglés Serrano": {
             "strength": "고르기 쉽고 선물용으로 보기 좋아요",
@@ -427,20 +535,6 @@ def build_product_sample_reviews(mart_name: str, category: str, product_name: st
             "keywords": ["가격이 싸요"],
         },
     }
-    category_detail = {
-        "하몽": [
-            f"{product_name}는 짠맛이 과하지 않은 편이라 여행 중에도 비교적 부담이 적었어요.",
-            f"{product_name}는 와인이나 빵이랑 같이 먹기 좋았고, 제품 성격이 비교적 분명했어요.",
-        ],
-        "치즈": [
-            f"{product_name}는 향이 너무 강하지 않아서 처음 사 보는 사람도 시도해보기 괜찮았어요.",
-            f"{product_name}는 샐러드나 플래터로 곁들이기 좋았고, 소포장 기준으로는 활용도가 괜찮았어요.",
-        ],
-        "올리브오일": [
-            f"{product_name}는 빵이나 토마토에 바로 곁들이기 좋을 만큼 쓰기 편한 느낌이었어요.",
-            f"{product_name}는 병 크기나 용도에 따라 고르기 쉬웠고, 집에서 자주 쓰는 용도로도 무난했어요.",
-        ],
-    }
     extra_variation = {
         "El Corte Inglés Serrano": [
             "포장이나 진열이 깔끔해서 처음 보는 제품도 덜 어렵게 느껴졌어요.",
@@ -465,7 +559,7 @@ def build_product_sample_reviews(mart_name: str, category: str, product_name: st
     }
 
     tone = mart_tone.get(mart_name, mart_tone["Mercadona"])
-    detail_lines = category_detail.get(category, [f"{product_name}는 무난하게 써보기 좋은 상품이었어요."])
+    detail_lines = product_detail_lines()
     extra_lines = extra_variation.get(mart_name, ["전체적으로 무난했지만, 아주 강한 인상을 남기는 타입은 아니었어요."])
 
     review_one = {
@@ -482,22 +576,38 @@ def build_product_sample_reviews(mart_name: str, category: str, product_name: st
         "keywords": ["양이 많아요"] if category != "올리브오일" else ["가격이 싸요"],
         "text": f"{detail_lines[min(1, len(detail_lines) - 1)]} {extra_lines[0]}",
     }
-    if "100%" in product_name or "bellota" in product_name.lower():
+    if "100%" in lowered or "bellota" in lowered:
         review_one["author"] = "hyerin"
         review_one["rating"] = min(5, tone["rating"] + 1)
         review_one["keywords"] = ["맛이 좋아요"]
-        review_one["text"] = f"{product_name}는 확실히 풍미가 진하게 느껴졌어요. {tone['strength']}. 대신 {tone['weakness']}."
-    if "gran selección" in product_name.lower() or "gran seleccion" in product_name.lower():
+        review_one["text"] = f"{product_name}는 한 입 먹었을 때 향과 지방감이 확실히 살아 있었어요. {tone['strength']}. 대신 {tone['weakness']}."
+    if "gran selección" in lowered or "gran seleccion" in lowered:
         review_two["author"] = "minji"
-        review_two["text"] = f"{product_name}는 일반 제품보다 조금 더 특별하게 느껴졌어요. {extra_lines[1]}"
-    if "cabra" in product_name.lower():
+        review_two["text"] = f"{product_name}는 요리 마무리용으로 뿌렸을 때 차이가 느껴졌어요. {extra_lines[1]}"
+    if "cabra" in lowered:
         review_two["author"] = "jiae"
         review_two["keywords"] = ["맛이 좋아요"]
-        review_two["text"] = f"{product_name}는 향이 분명해서 취향에 맞으면 만족도가 높을 것 같아요. {extra_lines[0]}"
-    if "picual" in product_name.lower() or "arbequina" in product_name.lower():
+        review_two["text"] = f"{product_name}는 샐러드나 플래터에 올렸을 때 향이 확 살아났어요. {extra_lines[0]}"
+    if "picual" in lowered or "arbequina" in lowered:
         review_two["author"] = "sua"
         review_two["keywords"] = ["맛이 좋아요"]
-        review_two["text"] = f"{product_name}는 품종 차이를 느껴보고 싶은 사람에겐 괜찮았어요. {extra_lines[1]}"
+        review_two["text"] = f"{product_name}는 품종 차이를 비교해 보고 싶은 사람에겐 재미가 있었어요. {extra_lines[1]}"
+    if "serrano" in lowered:
+        review_two["author"] = "yebin"
+        review_two["keywords"] = ["가격이 싸요"]
+        review_two["text"] = f"{product_name}는 부담 없이 담기 좋았고 샌드위치나 간단한 안주용으로 쓰기 편했어요. {extra_lines[1]}"
+    if "manchego" in lowered:
+        review_two["author"] = "gyuri"
+        review_two["keywords"] = ["맛이 좋아요"]
+        review_two["text"] = f"{product_name}는 처음 스페인 치즈를 살 때 가장 안전한 선택처럼 느껴졌어요. {extra_lines[1]}"
+    if "truf" in lowered:
+        review_two["author"] = "somin"
+        review_two["keywords"] = ["맛이 좋아요"]
+        review_two["text"] = f"{product_name}는 향이 강해서 와인 안주로는 좋았지만 한 번에 많이 먹기엔 진했어요. {extra_lines[0]}"
+    if "carbonell" in lowered or "coosur" in lowered:
+        review_two["author"] = "chaerin"
+        review_two["keywords"] = ["가격이 싸요"]
+        review_two["text"] = f"{product_name}는 요리에 편하게 쓰기 좋았고 브랜드가 익숙해서 장바구니에 담기 쉬웠어요. {extra_lines[0]}"
 
     return [review_one, review_two]
 
